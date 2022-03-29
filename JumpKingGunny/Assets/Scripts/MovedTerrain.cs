@@ -8,10 +8,10 @@ public class MovedTerrain : MonoBehaviour
     public int startingPoint;
     public Transform[] points;
 
+  
     public int movementType;
     // 0: normal (A to B and B back to A)
     // 1: One way (A to B and teleport to A) (Only with 2 points)
-    // 2: Rotate
 
     private int i;
 

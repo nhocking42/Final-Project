@@ -55,8 +55,9 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\CharacterManager.cs" />
     <Compile Include="Assets\Scripts\ForceBarManager.cs" />
-    <Compile Include="Assets\Scripts\MovedTerrain.cs" />
     <Compile Include="Assets\Scripts\TeleportManager.cs" />
+    <Compile Include="Assets\Scripts\MovedTerrain.cs" />
+    <Compile Include="Assets\Scripts\RotateObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
