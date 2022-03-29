@@ -8,6 +8,11 @@ public class MovedTerrain : MonoBehaviour
     public int startingPoint;
     public Transform[] points;
 
+    public int movementType;
+    // 0: Static
+    // 1: Move in Line (From A to B)
+    // 2: Rotate
+
     private int i;
 
     private void Start()

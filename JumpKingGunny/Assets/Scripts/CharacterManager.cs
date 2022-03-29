@@ -29,6 +29,10 @@ public class CharacterManager : MonoBehaviour
 
     private float corner;
 
+    public GameObject[] floorPosition;
+    public int currentFloor;
+    private const float limitedFloorHeight = 5.3f;
+
     private void Start()
     {
         isHolding = false;
@@ -37,12 +41,31 @@ public class CharacterManager : MonoBehaviour
 
         cornerLevel = 1.55;
 
+        currentFloor = 0;
+
     }
     void Update()
     {
         Movement();
         RespawnEvent(-10);
         DirectionControl();
+
+        setCurrentFloor();
+        camera.transform.position = new Vector3(floorPosition[currentFloor].transform.position.x, 
+                                                floorPosition[currentFloor].transform.position.y,
+                                                -10);
+    }
+
+    public void setCurrentFloor()
+    {
+        while (transform.position.y > floorPosition[currentFloor].transform.position.y + limitedFloorHeight)
+        {
+            currentFloor++;
+        }
+        while (transform.position.y < floorPosition[currentFloor].transform.position.y - limitedFloorHeight)
+        {
+            currentFloor--;
+        }
     }
     
     private void Movement()
