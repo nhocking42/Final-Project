@@ -59,6 +59,7 @@
     <Compile Include="Assets\Scripts\TeleportManager.cs" />
     <Compile Include="Assets\Scripts\RotateObject.cs" />
     <Compile Include="Assets\Scripts\MovedTerrain.cs" />
+    <Compile Include="Assets\Scripts\SoundManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

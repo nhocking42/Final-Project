@@ -14,12 +14,13 @@ public class CharacterManager : MonoBehaviour
 
     public ForceBarManager forceBar;
     private float jumpForce;
+    private float timeForForceUp;
 
     private bool isHolding;
 
     private double deviatedLevel = 0.01;
     private static float width = 3;
-
+    
     public GameObject cornerBorder;
     public GameObject directionPoint;
     private Vector2 directionVector;
@@ -32,6 +33,7 @@ public class CharacterManager : MonoBehaviour
     public GameObject[] floorPosition;
     public int currentFloor;
     private const float limitedFloorHeight = 5.3f;
+    private const int maxTimeForForceUp = 5;
 
     public GameObject gameManager;
 
@@ -44,6 +46,8 @@ public class CharacterManager : MonoBehaviour
         cornerLevel = 1.55;
 
         currentFloor = 0;
+
+        timeForForceUp = 0;
 
     }
     void Update()
@@ -64,7 +68,8 @@ public class CharacterManager : MonoBehaviour
         {
             currentFloor++;
         }
-        while (transform.position.y < floorPosition[currentFloor].transform.position.y - limitedFloorHeight)
+        while (transform.position.y < floorPosition[currentFloor].transform.position.y - limitedFloorHeight &&
+                currentFloor > 0)
         {
             currentFloor--;
         }
@@ -76,11 +81,21 @@ public class CharacterManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && rg.velocity == Vector2.zero)
         {
             isHolding = true;
+            if (rg.velocity == Vector2.zero)
+            {
+                SoundManager.PlaySound("forceUp");
+            }
         }
         if (Input.GetKeyUp(KeyCode.Space))
         {
             
             isHolding = false;
+            if (jumpForce > 0)
+            {
+                SoundManager.Stop();
+                SoundManager.PlaySound("jump");
+                timeForForceUp = 0;
+            }
         }
 
         if (isHolding)
@@ -90,6 +105,17 @@ public class CharacterManager : MonoBehaviour
             if (jumpForce > MaxForce)
             {
                 jumpForce = MaxForce;
+            }
+            if (timeForForceUp < maxTimeForForceUp)
+            {
+                timeForForceUp += Time.deltaTime;
+            }
+            else
+            {
+                timeForForceUp = 0;
+                jumpForce = 0;
+                isHolding = false;
+                ani.SetTrigger("goIdle");
             }
         }
         else

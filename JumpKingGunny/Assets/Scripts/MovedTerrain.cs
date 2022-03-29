@@ -56,7 +56,11 @@ public class MovedTerrain : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        collision.transform.SetParent(transform);
+        if (collision.transform.position.y > transform.position.y)
+        {
+            collision.transform.SetParent(transform);
+            collision.transform.GetComponent<CharacterManager>().ani.SetTrigger("goIdle");
+        }
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
