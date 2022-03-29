@@ -33,6 +33,8 @@ public class CharacterManager : MonoBehaviour
     public int currentFloor;
     private const float limitedFloorHeight = 5.3f;
 
+    public GameObject gameManager;
+
     private void Start()
     {
         isHolding = false;
@@ -47,7 +49,7 @@ public class CharacterManager : MonoBehaviour
     void Update()
     {
         Movement();
-        RespawnEvent();
+        RespawnCondition();
         DirectionControl();
 
         setCurrentFloor();
@@ -147,14 +149,18 @@ public class CharacterManager : MonoBehaviour
         directionVector = directionPoint.transform.position - transform.position;
     }
 
-    public void RespawnEvent()
+    private void RespawnCondition()
     {
         if (transform.position.y < -10 || transform.position.x < -11 || transform.position.x > 11)
         {
-            transform.position = spawnPoint.transform.position;
+            RespawnEvent();
             rg.velocity = Vector2.zero;
         }
-        
+    }
+
+    public void RespawnEvent()
+    {
+        transform.position = spawnPoint.transform.position;
     }
 
     private bool isTouchingLeftLimited()
@@ -177,6 +183,15 @@ public class CharacterManager : MonoBehaviour
         else
         {
             return false;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "FinalPoint")
+        {
+            gameManager = GameObject.FindGameObjectWithTag("GameManager");
+            gameManager.GetComponent<GameManager>().winGame();
         }
     }
 

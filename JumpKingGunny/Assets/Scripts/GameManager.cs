@@ -37,6 +37,21 @@ public class GameManager : MonoBehaviour
         }
 
         timeDisplay.text = hours + " : " + minutes + " : " + (int)seconds;
+
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            if (endMenu.activeSelf == false)
+            {
+                winGame();
+            }
+            else
+            {
+                Time.timeScale = 1;
+                endMenu.SetActive(false);
+            }
+                
+        }
+
     }
 
     public void winGame()
