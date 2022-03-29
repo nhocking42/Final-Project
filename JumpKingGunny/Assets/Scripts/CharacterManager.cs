@@ -47,7 +47,7 @@ public class CharacterManager : MonoBehaviour
     void Update()
     {
         Movement();
-        RespawnEvent(-10);
+        RespawnEvent();
         DirectionControl();
 
         setCurrentFloor();
@@ -147,7 +147,7 @@ public class CharacterManager : MonoBehaviour
         directionVector = directionPoint.transform.position - transform.position;
     }
 
-    private void RespawnEvent(int underLimitPosition)
+    public void RespawnEvent()
     {
         if (transform.position.y < -10 || transform.position.x < -11 || transform.position.x > 11)
         {
