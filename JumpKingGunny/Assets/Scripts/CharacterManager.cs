@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class CharacterManager : MonoBehaviour
 {
-    private const int MaxForce = 50;
-
     public GameObject camera;
     public GameObject spawnPoint;
     public Rigidbody2D rg;
@@ -14,13 +12,12 @@ public class CharacterManager : MonoBehaviour
 
     public ForceBarManager forceBar;
     private float jumpForce;
-    private float timeForForceUp;
 
     private bool isHolding;
 
     private double deviatedLevel = 0.01;
     private static float width = 3;
-    
+
     public GameObject cornerBorder;
     public GameObject directionPoint;
     private Vector2 directionVector;
@@ -30,49 +27,20 @@ public class CharacterManager : MonoBehaviour
 
     private float corner;
 
-    public GameObject[] floorPosition;
-    public int currentFloor;
-    private const float limitedFloorHeight = 5.3f;
-    private const int maxTimeForForceUp = 5;
-
-    public GameObject gameManager;
-
     private void Start()
     {
         isHolding = false;
         jumpForce = 0;
-        forceBar.SetMaxForce(MaxForce);
+        forceBar.SetMaxForce(100);
 
         cornerLevel = 1.55;
-
-        currentFloor = 0;
-
-        timeForForceUp = 0;
 
     }
     void Update()
     {
         Movement();
-        RespawnCondition();
+        RespawnEvent(-10);
         DirectionControl();
-
-        setCurrentFloor();
-        camera.transform.position = new Vector3(floorPosition[currentFloor].transform.position.x, 
-                                                floorPosition[currentFloor].transform.position.y,
-                                                -10);
-    }
-
-    public void setCurrentFloor()
-    {
-        while (transform.position.y > floorPosition[currentFloor].transform.position.y + limitedFloorHeight)
-        {
-            currentFloor++;
-        }
-        while (transform.position.y < floorPosition[currentFloor].transform.position.y - limitedFloorHeight &&
-                currentFloor > 0)
-        {
-            currentFloor--;
-        }
     }
     
     private void Movement()
@@ -81,41 +49,20 @@ public class CharacterManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && rg.velocity == Vector2.zero)
         {
             isHolding = true;
-            if (rg.velocity == Vector2.zero)
-            {
-                SoundManager.PlaySound("forceUp");
-            }
         }
         if (Input.GetKeyUp(KeyCode.Space))
         {
             
             isHolding = false;
-            if (jumpForce > 0)
-            {
-                SoundManager.Stop();
-                SoundManager.PlaySound("jump");
-                timeForForceUp = 0;
-            }
         }
 
         if (isHolding)
         {
             ani.SetBool("isHold", true);
             jumpForce += 0.5f;
-            if (jumpForce > MaxForce)
+            if (jumpForce > 100)
             {
-                jumpForce = MaxForce;
-            }
-            if (timeForForceUp < maxTimeForForceUp)
-            {
-                timeForForceUp += Time.deltaTime;
-            }
-            else
-            {
-                timeForForceUp = 0;
-                jumpForce = 0;
-                isHolding = false;
-                ani.SetTrigger("goIdle");
+                jumpForce = 100;
             }
         }
         else
@@ -152,8 +99,7 @@ public class CharacterManager : MonoBehaviour
         {
             directionPoint.SetActive(true);
             cornerBorder.SetActive(true);
-            ani.SetBool("isFalling", false)
-                ;
+            ani.SetBool("isFalling", false);
         }
 
         corner = Vector2.Angle(Vector2.up, directionVector);
@@ -175,18 +121,14 @@ public class CharacterManager : MonoBehaviour
         directionVector = directionPoint.transform.position - transform.position;
     }
 
-    private void RespawnCondition()
+    private void RespawnEvent(int underLimitPosition)
     {
         if (transform.position.y < -10 || transform.position.x < -11 || transform.position.x > 11)
         {
-            RespawnEvent();
+            transform.position = spawnPoint.transform.position;
             rg.velocity = Vector2.zero;
         }
-    }
-
-    public void RespawnEvent()
-    {
-        transform.position = spawnPoint.transform.position;
+        
     }
 
     private bool isTouchingLeftLimited()
@@ -209,15 +151,6 @@ public class CharacterManager : MonoBehaviour
         else
         {
             return false;
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.tag == "FinalPoint")
-        {
-            gameManager = GameObject.FindGameObjectWithTag("GameManager");
-            gameManager.GetComponent<GameManager>().winGame();
         }
     }
 
