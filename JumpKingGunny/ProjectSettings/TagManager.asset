@@ -6,6 +6,8 @@ TagManager:
   tags:
   - LimitBorder
   - Platform
+  - FinalPoint
+  - GameManager
   layers:
   - Default
   - TransparentFX

@@ -55,9 +55,11 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\CharacterManager.cs" />
     <Compile Include="Assets\Scripts\ForceBarManager.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\TeleportManager.cs" />
+    <Compile Include="Assets\Scripts\RotateObject.cs" />
     <Compile Include="Assets\Scripts\MovedTerrain.cs" />
-    <Compile Include="Assets\Scripts\CameraManager.cs" />
-    <Compile Include="Assets\Scripts\RandomPosition.cs" />
+    <Compile Include="Assets\Scripts\SoundManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
